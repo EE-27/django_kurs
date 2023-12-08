@@ -27,6 +27,7 @@ class MailingList(models.Model):
         ("weekly", "Once a week"),  # která má být nastavena v modelu,
         ("monthly", "Once a month")  # a druhým prvkem je lidsky čitelný název.
     ]
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, default=1)
 
     mailing_time = models.TimeField(verbose_name="Mailing time")
     periodicity = models.CharField(max_length=12, choices=PERIODICITY_CHOICES, verbose_name="Periodicity")
@@ -34,12 +35,13 @@ class MailingList(models.Model):
 
     class Meta:
         verbose_name = "Mailing list"
-        verbose_name_plural = "Mailign lists"
+        verbose_name_plural = "Mailing lists"
 
 
 class MailingMessage(models.Model):
     mailing_list = models.ForeignKey(MailingList,  # pokud je odstraněn MailingList, měly by být odstraněny
                                      on_delete=models.CASCADE)  # i všechny související zprávy v MailingMessage.
+
     subject = models.CharField(max_length=256, verbose_name="E-mail subject")
     body = models.TextField(verbose_name="E-mail body")
 
@@ -50,6 +52,7 @@ class MailingMessage(models.Model):
 
 class MailingLog(models.Model):
     mailing_list = models.ForeignKey(MailingList, on_delete=models.CASCADE)
+
     date_time = models.DateTimeField(default=timezone.now, verbose_name="Date & Time")
     status = models.CharField(max_length=24, verbose_name="Status")
     server_response = models.TextField(verbose_name="Server response")

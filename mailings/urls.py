@@ -1,7 +1,7 @@
 from django.urls import path
 
-from mailings.views import index
+from mailings.views import ClientListView
 
 urlpatterns = [
-    path("", index),
+    path("", ClientListView.as_view(), name='index'),
 ]
