@@ -33,6 +33,7 @@ class ClientUpdateView(UpdateView):
 
 
 class ClientDeleteView(DeleteView):
+    """ delete Client """
     model = Client
     template_name = "mailings/client_confirm_delete.html"
 
@@ -42,6 +43,7 @@ class ClientDeleteView(DeleteView):
 
 
 class ClientCreateView(CreateView):
+    """ create Client """
     model = Client
     fields = ("email", "name", "surname", "comment")
     template_name = "mailings/client_form.html"
