@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.urls import reverse
-from django.views.generic import ListView, DetailView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView
 
 from mailings.models import Client
 
@@ -35,6 +35,16 @@ class ClientUpdateView(UpdateView):
 class ClientDeleteView(DeleteView):
     model = Client
     template_name = "mailings/client_confirm_delete.html"
+
+    def get_success_url(self):
+        """ come back to client list view """
+        return reverse('client_list_view')
+
+
+class ClientCreateView(CreateView):
+    model = Client
+    fields = ("email", "name", "surname", "comment")
+    template_name = "mailings/client_form.html"
 
     def get_success_url(self):
         """ come back to client list view """
