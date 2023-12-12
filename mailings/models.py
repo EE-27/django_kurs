@@ -6,6 +6,7 @@ from django.utils import timezone
 # py manage.py migrate
 # py manage.py makemigrations
 
+
 class Client(models.Model):
     email = models.EmailField(verbose_name="E-mail")
     name = models.CharField(max_length=64, verbose_name="Name")
@@ -21,26 +22,9 @@ class Client(models.Model):
         ordering = ("email",)
 
 
-class MailingList(models.Model):
-    PERIODICITY_CHOICES = [  # CapsLock
-        ("daily", "Once a day"),  # Prvním prvkem každého tuplu je skutečná hodnota,
-        ("weekly", "Once a week"),  # která má být nastavena v modelu,
-        ("monthly", "Once a month")  # a druhým prvkem je lidsky čitelný název.
-    ]
-    client = models.ForeignKey(Client, on_delete=models.CASCADE, default=1)
-
-    mailing_time = models.TimeField(verbose_name="Mailing time")
-    periodicity = models.CharField(max_length=12, choices=PERIODICITY_CHOICES, verbose_name="Periodicity")
-    mailing_status = models.CharField(max_length=24, verbose_name="Mailing status")
-
-    class Meta:
-        verbose_name = "Mailing list"
-        verbose_name_plural = "Mailing lists"
-
-
-class MailingMessage(models.Model):
-    mailing_list = models.ForeignKey(MailingList,  # pokud je odstraněn MailingList, měly by být odstraněny
-                                     on_delete=models.CASCADE)  # i všechny související zprávy v MailingMessage.
+class Message(models.Model):
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='messages', verbose_name="Client", null=True)
+    # pokud je odstraněn MailingList, měly by být odstraněny i všechny související zprávy v MailingMessage.
 
     subject = models.CharField(max_length=256, verbose_name="E-mail subject")
     body = models.TextField(verbose_name="E-mail body")
@@ -50,13 +34,30 @@ class MailingMessage(models.Model):
         verbose_name_plural = "Mailing messages"
 
 
-class MailingLog(models.Model):
-    mailing_list = models.ForeignKey(MailingList, on_delete=models.CASCADE)
+class Settings(models.Model):
+    PERIODICITY_CHOICES = [  # CapsLock
+        ("daily", "Once a day"),  # Prvním prvkem každého tuplu je skutečná hodnota,
+        ("weekly", "Once a week"),  # která má být nastavena v modelu,
+        ("monthly", "Once a month")  # a druhým prvkem je lidsky čitelný název.
+    ]
 
-    date_time = models.DateTimeField(default=timezone.now, verbose_name="Date & Time")
-    status = models.CharField(max_length=24, verbose_name="Status")
-    server_response = models.TextField(verbose_name="Server response")
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='settings', verbose_name="Client")
+
+    mailing_time = models.TimeField(verbose_name="Mailing time")
+    periodicity = models.CharField(max_length=12, choices=PERIODICITY_CHOICES, verbose_name="Periodicity")
+    mailing_status = models.CharField(max_length=24, verbose_name="Mailing status")
 
     class Meta:
-        verbose_name = "Mailing log"
-        verbose_name_plural = "Mailing logs"
+        verbose_name = "Mailing list"
+        verbose_name_plural = "Mailing lists"
+
+# class MailingLog(models.Model):
+#     mailing_list = models.ForeignKey(MailingList, on_delete=models.CASCADE)
+#
+#     date_time = models.DateTimeField(default=timezone.now, verbose_name="Date & Time")
+#     status = models.CharField(max_length=24, verbose_name="Status")
+#     server_response = models.TextField(verbose_name="Server response")
+#
+#     class Meta:
+#         verbose_name = "Mailing log"
+#         verbose_name_plural = "Mailing logs"

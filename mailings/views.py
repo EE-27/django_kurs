@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView
 
-from mailings.models import Client
+from mailings.models import Client, Message
 
 
 def index(request):
@@ -51,3 +51,48 @@ class ClientCreateView(CreateView):
     def get_success_url(self):
         """ come back to client list view """
         return reverse('client_list_view')
+
+
+class MessageListView(ListView):
+    """ show all Messages """
+    model = Message
+    template_name = 'mailings/message_list_view.html'
+
+
+###
+class MessageDetailView(DetailView):
+    """ show one Message """
+    model = Message
+    template_name = "mailings/message_detail.html"
+
+
+class MessageUpdateView(UpdateView):
+    """ update Message """
+    model = Message
+    fields = ("subject", "body",)
+    template_name = "mailings/message_form.html"
+
+    def get_success_url(self):
+        """ come back to message list view """
+        return reverse('message_list_view')
+
+
+class MessageDeleteView(DeleteView):
+    """ delete Message """
+    model = Message
+    template_name = "mailings/message_confirm_delete.html"
+
+    def get_success_url(self):
+        """ come back to message list view """
+        return reverse('message_list_view')
+
+
+class MessageCreateView(CreateView):
+    """ create Message """
+    model = Message
+    fields = ("subject", "body",)
+    template_name = "mailings/message_form.html"
+
+    def get_success_url(self):
+        """ come back to message list view """
+        return reverse('message_list_view')
