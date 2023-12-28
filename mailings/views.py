@@ -2,13 +2,14 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView
 
-from mailings.models import Client, Message
+from mailings.models import Client, Message, Settings
 
 
 def index(request):
     return render(request, "mailings/index.html")
 
 
+### Client
 class ClientListView(ListView):
     """ show all Clients """
     model = Client
@@ -59,7 +60,7 @@ class MessageListView(ListView):
     template_name = 'mailings/message_list_view.html'
 
 
-###
+### Message
 class MessageDetailView(DetailView):
     """ show one Message """
     model = Message
@@ -96,3 +97,19 @@ class MessageCreateView(CreateView):
     def get_success_url(self):
         """ come back to message list view """
         return reverse('message_list_view')
+
+
+### Setings
+class SettingsListView(ListView):
+    """ shows all settings"""
+    model = Settings
+    template_name = 'mailings/settings_list_view.html'
+
+
+class SettingsCreateView(CreateView):
+    model = Settings
+    fields = "__all__"
+    template_name = 'mailings/settings_form.html'
+
+    def get_success_url(self):
+        return reverse("settings_list_view")

@@ -24,7 +24,7 @@ class Client(models.Model):
 
 class Message(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='messages', verbose_name="Client", null=True)
-    # pokud je odstraněn MailingList, měly by být odstraněny i všechny související zprávy v MailingMessage.
+    # pokud je odstraněn Client, měly by být odstraněny i všechny související zprávy v MailingMessage.
 
     subject = models.CharField(max_length=256, verbose_name="E-mail subject")
     body = models.TextField(verbose_name="E-mail body")
@@ -48,8 +48,8 @@ class Settings(models.Model):
     mailing_status = models.CharField(max_length=24, verbose_name="Mailing status")
 
     class Meta:
-        verbose_name = "Mailing list"
-        verbose_name_plural = "Mailing lists"
+        verbose_name = "Settings"
+        verbose_name_plural = "Settings"
 
 # class MailingLog(models.Model):
 #     mailing_list = models.ForeignKey(MailingList, on_delete=models.CASCADE)

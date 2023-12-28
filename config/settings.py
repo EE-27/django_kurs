@@ -75,7 +75,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',  # psql -U postgres -- zapnout postgres
-        'NAME': "html_shop",                        # CREATE DATABASE  mailings; -- vytvořit db
+        'NAME': "mailings",                         # CREATE DATABASE  mailings; -- vytvořit db
         "USER": "postgres",                         # \q -- vypnout postgres
         "PASSWORD": "12345"                         # py manage.py migrate -- udělat migraci
     }
