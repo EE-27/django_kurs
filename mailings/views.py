@@ -13,6 +13,14 @@ def index(request):
     return render(request, "mailings/index.html")
 
 
+def success(request):
+    return render(request, "mailings/email_success.html")
+
+
+def no_success(request):
+    return render(request, "mailings/email_no_success.html")
+
+
 ### Client
 class ClientListView(ListView):
     """ show all Clients """
@@ -31,21 +39,21 @@ def send_email_to_client(request, client_id):
 
         if periodicity == 'daily':
             send_e_mail(client)
-            return HttpResponse("SEND")
+            return redirect("success")
 
         elif periodicity == 'weekly':
             if days_passed % 7 == 0:
                 send_e_mail(client)
-                return HttpResponse("SEND")
+                return redirect("success")
             else:
-                return HttpResponse("IT HAS NOT BEEN A WEEK")
+                return redirect("no success")
 
         elif periodicity == 'monthly':  # srát na jinak dlouhý měsíce monthly je prostě 30 dní
-            if days_passed % 30 == 0:   # bacha 0 / 30 == 0, takže se to pošle i dneska
+            if days_passed % 30 == 0:  # bacha 0 / 30 == 0, takže se to pošle i dneska
                 send_e_mail(client)
-                return HttpResponse("SEND")
+                return redirect("success")
             else:
-                return HttpResponse("IT HAS NOT BEEN A MONTH")
+                return redirect("no success")
 
     context = {'client': client}
     return render(request, 'mailings/send_email_form.html', context)

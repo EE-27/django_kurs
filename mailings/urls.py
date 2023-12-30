@@ -1,5 +1,5 @@
 from django.urls import path
-from mailings.views import index, SettingsListView, SettingsCreateView, send_e_mail, send_email_to_client
+from mailings.views import index, SettingsListView, SettingsCreateView, send_email_to_client, success, no_success
 
 from mailings.views import ClientListView, ClientDetailView, ClientUpdateView, ClientDeleteView, ClientCreateView
 from mailings.views import MessageListView, MessageDetailView, MessageUpdateView, MessageDeleteView, MessageCreateView
@@ -23,4 +23,6 @@ urlpatterns = [
     path("settings_create/", SettingsCreateView.as_view(), name="settings_create"),
 
     path('send_email/<int:client_id>/', send_email_to_client, name='send_email_to_client'),
+    path("email_success/", success, name='success'),
+    path("email_no_success/", no_success, name='no success'),
 ]
