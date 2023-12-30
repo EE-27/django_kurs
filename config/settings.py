@@ -79,9 +79,9 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',  # psql -U postgres -- zapnout postgres
-        'NAME': "mailings",                         # CREATE DATABASE  mailings; -- vytvořit db
-        "USER": os.getenv("USER_DB"),               # \q -- vypnout postgres
-        "PASSWORD": os.getenv("USER_PW")            # py manage.py migrate -- udělat migraci
+        'NAME': "mailings",  # CREATE DATABASE  mailings; -- vytvořit db
+        "USER": os.getenv("USER_DB"),  # \q -- vypnout postgres
+        "PASSWORD": os.getenv("USER_PW")  # py manage.py migrate -- udělat migraci
     }
 }
 
@@ -127,9 +127,9 @@ STATICFILES_DIRS = (
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
 EMAIL_HOST = os.getenv("EMAIL_HOST")
-EMAIL_PORT = os.getenv("EMAIL_PORT")
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
-EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS")
+EMAIL_PORT = os.getenv("EMAIL_PORT")
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False

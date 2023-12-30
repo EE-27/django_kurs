@@ -14,6 +14,11 @@
                         <li>{{ client.email }}</li>
                         <li>{{ client.comment }}</li>
                     </ul>
+                    <form method="post" action="{% url 'send_email_to_client' client.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="w-100 btn btn-lg btn-outline-primary">Send
+                        </button>
+                    </form>
                     <a href="/client_update/{{ client.pk }}/" class="w-100 btn btn-lg btn-outline-primary">Update</a>
                     <a href="/client_delete/{{ client.pk }}/" class="w-100 btn btn-lg btn-outline-warning">Delete</a>
                 </div>

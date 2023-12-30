@@ -23,15 +23,16 @@ class Client(models.Model):
 
 
 class Message(models.Model):
-    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='messages', verbose_name="Client", null=True)
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='messages', verbose_name="Client",
+                               null=True)
     # pokud je odstraněn Client, měly by být odstraněny i všechny související zprávy v MailingMessage.
 
     subject = models.CharField(max_length=256, verbose_name="E-mail subject")
     body = models.TextField(verbose_name="E-mail body")
 
     class Meta:
-        verbose_name = "Mailing message"
-        verbose_name_plural = "Mailing messages"
+        verbose_name = "Message"
+        verbose_name_plural = "Messages"
 
 
 class Settings(models.Model):
@@ -43,7 +44,8 @@ class Settings(models.Model):
 
     client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='settings', verbose_name="Client")
 
-    mailing_time = models.TimeField(verbose_name="Mailing time")
+    start_date = models.DateField(verbose_name="Starting date", blank=True, null=True)
+    mailing_time = models.TimeField(verbose_name="Mailing time", blank=True, null=True)
     periodicity = models.CharField(max_length=12, choices=PERIODICITY_CHOICES, verbose_name="Periodicity")
     mailing_status = models.CharField(max_length=24, verbose_name="Mailing status")
 
