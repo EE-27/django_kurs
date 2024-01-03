@@ -25,4 +25,5 @@ urlpatterns = [
     path('send_email/<int:client_id>/', send_email_to_client, name='send_email_to_client'),
     path("email_success/", success, name='success'),
     path("email_no_success/", no_success, name='no success'),
+
 ]

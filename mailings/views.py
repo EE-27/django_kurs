@@ -31,38 +31,47 @@ class ClientListView(ListView):
 def send_email_to_client(request, client_id):
     client = get_object_or_404(Client, pk=client_id)
 
+    messages = client.messages.all()
+    settings = client.settings.all()
+
     if request.method == 'POST':
-        settings_obj = client.settings.get()  # dostat setting pro clienta
-        start_date = settings_obj.start_date  # datum kdy se to zadalo
-        days_passed = (timezone.now().date() - start_date).days  # dnešní datum - dny kdy se to zadalo
-        periodicity = settings_obj.periodicity  # jestli: daily, weekly nebo monthly
-
-        if periodicity == 'daily':
-            send_e_mail(client)
-            return redirect("success")
-
-        elif periodicity == 'weekly':
-            if days_passed % 7 == 0:
-                send_e_mail(client)
+        selected_message_id = request.POST.get('selected_message')
+        selected_setting_id = request.POST.get('selected_setting')
+        # settings_obj = client.settings.get()  # dostat setting pro clienta
+        # start_date = settings_obj.start_date  # datum kdy se to zadalo
+        # days_passed = (timezone.now().date() - start_date).days  # dnešní datum - dny kdy se to zadalo
+        # periodicity = settings_obj.periodicity  # jestli: daily, weekly nebo monthly
+        if selected_message_id and selected_setting_id:
+            selected_message = get_object_or_404(Message, id=selected_message_id)
+            selected_setting = get_object_or_404(Settings, id=selected_setting_id)
+            periodicity = selected_setting.periodicity
+            start_date = selected_setting.start_date
+            days_passed = (timezone.now().date() - start_date).days
+            if periodicity == 'daily':
+                send_e_mail(client, selected_message, selected_setting)
                 return redirect("success")
-            else:
-                return redirect("no success")
 
-        elif periodicity == 'monthly':  # srát na jinak dlouhý měsíce monthly je prostě 30 dní
-            if days_passed % 30 == 0:  # bacha 0 / 30 == 0, takže se to pošle i dneska
-                send_e_mail(client)
-                return redirect("success")
-            else:
-                return redirect("no success")
+            elif periodicity == 'weekly':
+                if days_passed % 7 == 0:
+                    send_e_mail(client, selected_message, selected_setting)
+                    return redirect("success")
+                else:
+                    return redirect("no success")
 
-    context = {'client': client}
+            elif periodicity == 'monthly':  # srát na jinak dlouhý měsíce monthly je prostě 30 dní
+                if days_passed % 30 == 0:  # bacha 0 / 30 == 0, takže se to pošle i dneska
+                    send_e_mail(client, selected_message, selected_setting)
+                    return redirect("success")
+                else:
+                    return redirect("no success")
+
+    context = {'client': client, 'messages': messages, 'settings': settings}
     return render(request, 'mailings/send_email_form.html', context)
 
 
-def send_e_mail(client):
-    message = client.messages.latest('id')
-    subject = message.subject
-    body = message.body
+def send_e_mail(client, selected_message, selected_settings):
+    subject = selected_message.subject
+    body = selected_message.body
 
     send_mail(
         f"{subject}",
