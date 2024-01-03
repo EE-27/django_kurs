@@ -6,11 +6,13 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView
 
-from mailings.models import Client, Message, Settings
+from mailings.models import Client, Message, Settings, Log
 
 
 def index(request):
-    return render(request, "mailings/index.html")
+    logs = Log.objects.all()
+    context = {"logs": logs}
+    return render(request, "mailings/index.html", context)
 
 
 def success(request):
@@ -78,6 +80,13 @@ def send_e_mail(client, selected_message, selected_settings):
         f"{body}",
         settings.EMAIL_HOST_USER,
         [client.email]
+    )
+    log_entry = Log.objects.create(
+        client=client,
+        status="finished",
+        server_response="Email sent successfully",
+        email_subject=subject,
+        email_body=body
     )
 
 

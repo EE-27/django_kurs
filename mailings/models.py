@@ -53,13 +53,21 @@ class Settings(models.Model):
         verbose_name = "Settings"
         verbose_name_plural = "Settings"
 
-# class MailingLog(models.Model):
-#     mailing_list = models.ForeignKey(MailingList, on_delete=models.CASCADE)
-#
-#     date_time = models.DateTimeField(default=timezone.now, verbose_name="Date & Time")
-#     status = models.CharField(max_length=24, verbose_name="Status")
-#     server_response = models.TextField(verbose_name="Server response")
-#
-#     class Meta:
-#         verbose_name = "Mailing log"
-#         verbose_name_plural = "Mailing logs"
+
+class Log(models.Model):
+    STATUS_CHOICES = [
+        ("ongoing", "Ongoing"),
+        ("finished", "Finished")
+    ]
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
+
+    date_time = models.DateTimeField(default=timezone.now, verbose_name="Date & Time")
+    status = models.CharField(max_length=24, choices=STATUS_CHOICES, verbose_name="Status")
+    server_response = models.TextField(verbose_name="Server response")
+
+    email_subject = models.CharField(max_length=256, verbose_name="Email Subject", blank=True, null=True)
+    email_body = models.TextField(verbose_name="Email Body", blank=True, null=True)
+
+    class Meta:
+        verbose_name = "Mailing log"
+        verbose_name_plural = "Mailing logs"

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from mailings.models import Client, Message, Settings
+from mailings.models import Client, Message, Settings, Log
 
 
 # py manage.py createsuperuser UN:admin PW:12345
@@ -21,17 +21,21 @@ class ClientAdmin(admin.ModelAdmin):
 
 
 @admin.register(Settings)
-class MailingListAdmin(admin.ModelAdmin):
+class SettingsAdmin(admin.ModelAdmin):
     list_display = ('mailing_time', 'periodicity', 'mailing_status')
     search_fields = ('mailing_time', 'periodicity', 'mailing_status')
     list_filter = ('mailing_time', 'periodicity', 'mailing_status')
 
 
 @admin.register(Message)
-class MailingMessageAdmin(admin.ModelAdmin):
+class MessageAdmin(admin.ModelAdmin):
     list_display = ('subject', 'body')
     search_fields = ('subject', 'body')
 
+@admin.register(Log)
+class LogAdmin(admin.ModelAdmin):
+
+    list_display = ("client", "date_time", "status", "server_response", "email_subject", "email_body")
 
 # @admin.register(MailingLog)
 # class MailingLogAdmin(admin.ModelAdmin):
