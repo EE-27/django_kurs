@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     "mailings",  # added app
-    "mailings.templatetags"  # added media path tag
+    "mailings.templatetags",  # added media path tag
+
+    "django_apscheduler",
 ]
 
 MIDDLEWARE = [

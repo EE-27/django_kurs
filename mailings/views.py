@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.core.mail import send_mail
-from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
@@ -193,12 +192,10 @@ def client_detail(request, client_id):
     client = get_object_or_404(Client, pk=client_id)
 
     if request.method == 'POST' and 'send_email' in request.POST:
-        # Assuming you have a function to search for a client by name and surname
-        # Modify this based on your actual database schema
+
         searched_client = Client.objects.filter(name=client.name, surname=client.surname).first()
 
         if searched_client:
-            # Assuming you have a function to send an email
             send_email_to_client(searched_client)
             return render(request, 'mailings/email_sent.html')
 
