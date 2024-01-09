@@ -1,8 +1,11 @@
 from django.conf import settings
+from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.decorators import method_decorator
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView
 
 from mailings.models import Client, Message, Settings, Log
@@ -95,10 +98,17 @@ class ClientDetailView(DetailView):
     template_name = "mailings/client_detail.html"
 
 
-class ClientUpdateView(UpdateView):
-    """ update Client """
+class ClientUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    """ update Client """                         # |
+    # Permission - dát toto sem----------------------
+    # v /admin/ vybrat který Permission má která grupa nebo user
+    # potom na serveru pokud bude chtít, někdo udělat něco na co nebude mít pravomoce tak bude 403 error
+    # do každé classy nasrat <permission_required> = jsou 4 předělaný metody a musí to vypadat takto:
+    # <jméno aplikace>.<metoda>_<jméno modelu> ; metody: <add>    <change>   <delete>   <view>
+    #                                                 CreateView;UpdateView;DeleteView;DetailView
     model = Client
     fields = ("email", "name", "surname", "comment")
+    permission_required = "mailings.change_client"
     template_name = "mailings/client_form.html"
 
     def get_success_url(self):
@@ -106,9 +116,10 @@ class ClientUpdateView(UpdateView):
         return reverse('client_list_view')
 
 
-class ClientDeleteView(DeleteView):
+class ClientDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     """ delete Client """
     model = Client
+    permission_required = "mailings.delete_client"
     template_name = "mailings/client_confirm_delete.html"
 
     def get_success_url(self):
@@ -116,10 +127,11 @@ class ClientDeleteView(DeleteView):
         return reverse('client_list_view')
 
 
-class ClientCreateView(CreateView):
+class ClientCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     """ create Client """
     model = Client
     fields = ("email", "name", "surname", "comment")
+    permission_required = "mailings.add_client"
     template_name = "mailings/client_form.html"
 
     def get_success_url(self):
@@ -127,23 +139,24 @@ class ClientCreateView(CreateView):
         return reverse('client_list_view')
 
 
+### Message
 class MessageListView(ListView):
     """ show all Messages """
     model = Message
     template_name = 'mailings/message_list_view.html'
 
 
-### Message
 class MessageDetailView(DetailView):
     """ show one Message """
     model = Message
     template_name = "mailings/message_detail.html"
 
 
-class MessageUpdateView(UpdateView):
+class MessageUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     """ update Message """
     model = Message
-    fields = ("subject", "body",)
+    fields = ("subject", "body", "client")
+    permission_required = "mailings.change_message"
     template_name = "mailings/message_form.html"
 
     def get_success_url(self):
@@ -151,9 +164,10 @@ class MessageUpdateView(UpdateView):
         return reverse('message_list_view')
 
 
-class MessageDeleteView(DeleteView):
+class MessageDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     """ delete Message """
     model = Message
+    permission_required = "mailings.delete_message"
     template_name = "mailings/message_confirm_delete.html"
 
     def get_success_url(self):
@@ -161,10 +175,11 @@ class MessageDeleteView(DeleteView):
         return reverse('message_list_view')
 
 
-class MessageCreateView(CreateView):
+class MessageCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     """ create Message """
     model = Message
-    fields = ("subject", "body",)
+    fields = ("subject", "body", "client")
+    permission_required = "mailings.add_message"
     template_name = "mailings/message_form.html"
 
     def get_success_url(self):
@@ -173,15 +188,46 @@ class MessageCreateView(CreateView):
 
 
 ### Setings
+
+class SettingsDetailView(DetailView):
+    """ show one Settings """
+    model = Settings
+    template_name = "mailings/settings_detail.html"
+
+
 class SettingsListView(ListView):
     """ shows all settings"""
     model = Settings
     template_name = 'mailings/settings_list_view.html'
 
 
-class SettingsCreateView(CreateView):
+class SettingsUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    """ update Settings """
     model = Settings
     fields = "__all__"
+    permission_required = "mailings.change_settings"
+    template_name = "mailings/settings_form.html"
+
+    def get_success_url(self):
+        """ come back to Settings list view """
+        return reverse('settings_list_view')
+
+
+class SettingsDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    """ delete Settings """
+    model = Settings
+    permission_required = "mailings.delete_settings"
+    template_name = "mailings/settings_confirm_delete.html"
+
+    def get_success_url(self):
+        """ come back to settings list view """
+        return reverse('settings_list_view')
+
+
+class SettingsCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+    model = Settings
+    fields = "__all__"
+    permission_required = "mailings.add_settings"
     template_name = 'mailings/settings_form.html'
 
     def get_success_url(self):
