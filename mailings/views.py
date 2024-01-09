@@ -5,9 +5,10 @@ from django.core.mail import send_mail
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
-from django.utils.decorators import method_decorator
+
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView
 
+from mailings.forms import ClientForm, MessageForm, SettingsForm
 from mailings.models import Client, Message, Settings, Log
 
 
@@ -25,6 +26,13 @@ def no_success(request):
     return render(request, "mailings/email_no_success.html")
 
 
+def is_superuser(user):
+    """ tyhle permissions fungujou jen na funkce """
+    return user.is_superuser
+def is_moderator(user):
+    """ tyhle permissions fungujou jen na funkce """
+    return user.groups.filter(name='moderator').exists()
+
 ### Client
 class ClientListView(ListView):
     """ show all Clients """
@@ -32,6 +40,7 @@ class ClientListView(ListView):
     template_name = 'mailings/client_list_view.html'
 
 
+@user_passes_test(lambda u: is_superuser(u) or is_moderator(u))  # tohle testuje jestli je user moderator
 def send_email_to_client(request, client_id):
     client = get_object_or_404(Client, pk=client_id)
 
@@ -99,7 +108,7 @@ class ClientDetailView(DetailView):
 
 
 class ClientUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
-    """ update Client """                         # |
+    """ update Client """  # |
     # Permission - dát toto sem----------------------
     # v /admin/ vybrat který Permission má která grupa nebo user
     # potom na serveru pokud bude chtít, někdo udělat něco na co nebude mít pravomoce tak bude 403 error
@@ -107,7 +116,7 @@ class ClientUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     # <jméno aplikace>.<metoda>_<jméno modelu> ; metody: <add>    <change>   <delete>   <view>
     #                                                 CreateView;UpdateView;DeleteView;DetailView
     model = Client
-    fields = ("email", "name", "surname", "comment")
+    form_class = ClientForm
     permission_required = "mailings.change_client"
     template_name = "mailings/client_form.html"
 
@@ -130,7 +139,7 @@ class ClientDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
 class ClientCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     """ create Client """
     model = Client
-    fields = ("email", "name", "surname", "comment")
+    form_class = ClientForm
     permission_required = "mailings.add_client"
     template_name = "mailings/client_form.html"
 
@@ -155,7 +164,7 @@ class MessageDetailView(DetailView):
 class MessageUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     """ update Message """
     model = Message
-    fields = ("subject", "body", "client")
+    form_class = MessageForm
     permission_required = "mailings.change_message"
     template_name = "mailings/message_form.html"
 
@@ -178,7 +187,7 @@ class MessageDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView)
 class MessageCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     """ create Message """
     model = Message
-    fields = ("subject", "body", "client")
+    form_class = MessageForm
     permission_required = "mailings.add_message"
     template_name = "mailings/message_form.html"
 
@@ -204,7 +213,7 @@ class SettingsListView(ListView):
 class SettingsUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     """ update Settings """
     model = Settings
-    fields = "__all__"
+    form_class = SettingsForm
     permission_required = "mailings.change_settings"
     template_name = "mailings/settings_form.html"
 
@@ -226,7 +235,7 @@ class SettingsDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView
 
 class SettingsCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Settings
-    fields = "__all__"
+    form_class = SettingsForm
     permission_required = "mailings.add_settings"
     template_name = 'mailings/settings_form.html'
 
