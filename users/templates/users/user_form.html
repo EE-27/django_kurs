@@ -12,10 +12,20 @@
 
 
             {% csrf_token %}
+            <p>User Details:</p>
+            <p>Email: {{ user.email }}</p>
+            <p>Veritificated: {{ user.verification }}</p>
 
             {{ form.as_p }}
-            <button class="btn btn-primary" type="submit">Save</button>
-            <a href="/">Go Back</a>
+            {% if user.is_superuser %}
+                <button class="btn btn-primary" type="submit">Save</button>
+                <a href="/">Go Back</a>
+            {% else %}
+                <a href="/">Go Back</a>
+            {% if user.verification == False %}
+                <a href="{% url 'users:verification' %}">Verification of the email</a>
+            {% endif %}
+            {% endif %}
         </div>
     </div>
 </form>
