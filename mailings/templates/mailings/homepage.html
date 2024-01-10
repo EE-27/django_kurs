@@ -1,0 +1,31 @@
+{% extends 'mailings/base.html' %}
+{% load static %}
+{% load mediapath %}
+{% block content %}
+
+<main>
+    <div class="row g-4 py-5 row-cols-1 row-cols-lg-2">
+        <div class="feature col">
+            <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
+                <img src="{% mediapath 'mailigns.png' %}"/>
+            </div>
+            <h3 class="fs-2 text-body-emphasis text-center">MAILINGS</h3>
+            <p>Mailings is fucking shit, and whoever wants to somehow use is complete idiot, who doesn't have the right to live! Anyway pls accept my kursavoj. Spasíba</p>
+            <a href="/index/" class="icon-link">
+                Go to Mailings
+            </a>
+        </div>
+        <div class="feature col">
+            <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
+                <img src="{% mediapath 'blog.png' %}"/>
+            </div>
+            <h3 class="fs-2 text-body-emphasis text-center">BLOG</h3>
+            <p>OMG, you want to have blog as well, WELL FUCK MAILINGS. Blog will be about how i hate mailings and django and Maslov... if I ever write some blog in a future...</p>
+            <a href="/email_no_success/" class="icon-link text-right">
+                Go to Blog
+            </a>
+        </div>
+    </div>
+</main>
+{% endblock %}
+

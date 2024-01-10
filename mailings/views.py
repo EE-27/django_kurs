@@ -12,6 +12,9 @@ from mailings.forms import ClientForm, MessageForm, SettingsForm
 from mailings.models import Client, Message, Settings, Log
 
 
+def homepage(request):
+    return render(request, "mailings/homepage.html")
+
 def index(request):
     logs = Log.objects.all()
     context = {"logs": logs}

@@ -7,8 +7,7 @@ from users.views import RegisterView, ProfileView, ProfileDetailView, verificati
 app_name = UsersConfig.name
 
 urlpatterns = [
-    path('verification/', verification, name='verification'),
-    path('verify_code/<str:code>/', verify_code, name='verify_code'),
+
 
     path("", LoginView.as_view(template_name="users/login.html"), name="login"),
     path("logout/", LogoutView.as_view(), name="logout"),
@@ -16,5 +15,7 @@ urlpatterns = [
     path("profile/", ProfileView.as_view(), name="profile"),
     path("detail/", ProfileDetailView.as_view(), name="detail"),
 
+    path('verification/', verification, name='verification'),
+    path('verify_code/<str:code>/', verify_code, name='verify_code'),
 
 ]

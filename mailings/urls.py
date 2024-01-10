@@ -1,6 +1,6 @@
 
 from django.urls import path
-from mailings.views import index, send_email_to_client, success, no_success
+from mailings.views import index, send_email_to_client, success, no_success, homepage
 from django.contrib.auth.decorators import login_required
 
 from mailings.views import ClientListView, ClientDetailView, ClientUpdateView, ClientDeleteView, ClientCreateView
@@ -10,7 +10,8 @@ from mailings.views import SettingsListView, SettingsDetailView, SettingsUpdateV
 
 
 urlpatterns = [
-    path("", index),
+    path("", homepage),
+    path("index/", index, name="index"),
 
     path("client_list_view/", ClientListView.as_view(), name='client_list_view'),
     path("client_detail/<int:pk>/", ClientDetailView.as_view(), name="client_detail"),

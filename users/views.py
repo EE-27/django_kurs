@@ -54,7 +54,9 @@ def verification(request):
     Veritifikace:
     v modelu User přidat:     verification = models.BooleanField(default=False, verbose_name="Verification")
     verification_code = models.CharField(max_length=4, null=True, blank=True) + funkce na ověření
-
+    urls:
+        path('verification/', verification, name='verification'),
+    path('verify_code/<str:code>/', verify_code, name='verify_code'),
 
     v html veritification musí být : <form method="post" action="{% url 'users:verify_code' user.verification_code %}">
     a dole <button type="submit">Verify</button> tím se zadaný kod odešele do fuckce: verify_code
