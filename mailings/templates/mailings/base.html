@@ -14,11 +14,6 @@
     <meta name="generator" content="Hugo 0.118.2">
     <title>Pricing example · Bootstrap v5.3</title>
 
-    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/pricing/">
-
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
-
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">  <!-- changed path to static/ -->
 
     <style>
@@ -102,7 +97,7 @@
 
 
     <!-- Custom styles for this template -->
-    <link href="pricing.css" rel="stylesheet">
+    <link href="{% static 'css/pricing.css' %}" rel="stylesheet">
 </head>
 <body>
 <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
@@ -193,18 +188,16 @@
                 </svg>
                 <span class="fs-4">Pricing example</span>
             </a>
+            {% include 'mailings/user_menu.html' %}
 
-            <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
-                <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="#">Features</a>
-                <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="#">Enterprise</a>
-                <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="#">Support</a>
-                <a class="py-2 link-body-emphasis text-decoration-none" href="/">Index</a>
-            </nav>
         </div>
 
-        <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
-            <h1 class="display-4 fw-normal text-body-emphasis">Mailings</h1>
-            <p class="fs-5 text-body-secondary">I have no fucking idea what this (((app))) should do, nor do I care.</p>
+        <div class="pricing-header p-3 pb-md-4 mx-auto">
+            <h1 class="display-4 fw-normal text-body-emphasis text-center">Mailings</h1>
+            <p class="fs-5 text-body-secondary text-center">I have no fucking idea what this (((app))) should do, nor do I care.</p>
+            <p class="fs-5 text-body-secondary text-left">admin@123.com pw: 12345</p>
+            <p class="fs-5 text-body-secondary">harry_potter@seznam.cz pw: Harry1991</p>
+            <p class="fs-5 text-body-secondary">dutch@gay.cz pw: Mail1991</p>
         </div>
     </header>
     {% block content %}

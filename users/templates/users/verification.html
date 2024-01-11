@@ -1,0 +1,10 @@
+{% extends 'mailings/base.html' %}
+{% load static %}
+{% block content %}
+  <h2>Enter Verification Code</h2>
+  <form method="post" action="{% url 'users:verify_code' user.verification_code %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Verify</button>
+  </form>
+{% endblock %}

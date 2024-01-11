@@ -38,11 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    "users",
     "mailings",  # added app
     "mailings.templatetags",  # added media path tag
 
     "django_apscheduler",
+
 ]
 
 MIDDLEWARE = [
@@ -124,6 +125,9 @@ STATICFILES_DIRS = (
     BASE_DIR / "static",  # made static file
 )
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # to show avatars, also in urls
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
@@ -135,3 +139,17 @@ EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = os.getenv("EMAIL_PORT")
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
+
+AUTH_USER_MODEL = "users.User"
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
+LOGIN_URL = "/users/"
+
+CACHE_ENABLED = os.getenv("CACHE_ENABLED")
+if CACHE_ENABLED:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.redis.RedisCache",
+            "LOCATION": os.getenv("CACHE_LOCATION"),  # nezapomenout si spustit redis-server.exe
+        }
+    }
