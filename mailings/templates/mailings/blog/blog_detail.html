@@ -11,9 +11,12 @@
         <h3 class="mb-0">{{ blog.title }}</h3>
         <div class="mb-1 text-body-secondary">{{ blog.publication_date}}</div>
         <p class="card-text mb-auto">{{ blog.article }}</p>
-        <a href="/blog_update/{{ blog.pk }}/" class="icon-link gap-1 icon-link-hover stretched-link">Update</a>
-        <a href="/blog_delete/{{ blog.pk }}/" class="icon-link gap-1 icon-link-hover stretched-link">Delete</a>
-
+        {% if user.is_superuser %}
+            <div class="col p-4">
+            <a href="/blog_update/{{ blog.pk }}/" class="icon-link">Update</a>
+            <a href="/blog_delete/{{ blog.pk }}/" class="icon-link">Delete</a>
+            </div>
+        {% endif %}
     </div>
 
     <div class="col-auto d-none d-lg-block">

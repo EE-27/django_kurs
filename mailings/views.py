@@ -1,3 +1,5 @@
+from random import sample
+
 from django.conf import settings
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
@@ -13,7 +15,21 @@ from mailings.models import Client, Message, Settings, Log, Blog
 
 
 def homepage(request):
-    return render(request, "mailings/homepage.html")
+    client_count = Client.objects.count()
+    message_count = Message.objects.count()
+    log_count = Log.objects.count()
+
+    blog_list = Blog.objects.all()
+    random_blog = sample(list(blog_list), min(3, blog_list.count()))
+
+    context = {
+        "client_count": client_count,
+        "message_count" : message_count,
+        "log_count" : log_count,
+        "random_blog" : random_blog
+    }
+
+    return render(request, "mailings/homepage.html", context)
 
 
 def index(request):

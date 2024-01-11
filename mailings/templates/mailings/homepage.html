@@ -10,7 +10,8 @@
                 <img src="{% mediapath 'mailigns.png' %}"/>
             </div>
             <h3 class="fs-2 text-body-emphasis text-center">MAILINGS</h3>
-            <p>Mailings is fucking shit, and whoever wants to somehow use is complete idiot, who doesn't have the right to live! Anyway pls accept my kursavoj. Spasíba</p>
+            <p>Mailings is fucking shit, and whoever wants to somehow use is complete idiot, who doesn't have the right
+                to live! Anyway pls accept my kursavoj. Spasíba</p>
             <a href="/index/" class="icon-link">
                 Go to Mailings
             </a>
@@ -20,12 +21,28 @@
                 <img src="{% mediapath 'blog.png' %}"/>
             </div>
             <h3 class="fs-2 text-body-emphasis text-center">BLOG</h3>
-            <p>OMG, you want to have blog as well, WELL FUCK MAILINGS. Blog will be about how i hate mailings and django and Maslov... if I ever write some blog in a future...</p>
+            <p>OMG, you want to have blog as well, WELL FUCK MAILINGS. Blog will be about how i hate mailings and django
+                and Maslov... if I ever write some blog in a future...</p>
             <a href="/blog/" class="icon-link text-right">
                 Go to Blog
             </a>
         </div>
     </div>
+
+    <ul class="list-unstyled mt-3 mb-4">
+        <li>Total clients: {{ client_count }}</li>
+        <li>Total messages: {{ message_count }}</li>
+        <li>Total logs: {{ log_count }}</li>
+    </ul>
+    {% for blog in random_blog %}
+    <div class="card-header py-3">
+        <h4 class="my-0 fw-normal">{{ blog.title }}</h4>
+    </div>
+    <div class="card-body">
+        <p>{{ blog.article }}</p>
+        <!--a href="/blog_detail/{{ blog.pk }}/" class="icon-link gap-1 icon-link-hover stretched-link">Continue
+            reading /a /div   wierd-->
+    {% endfor %}
 </main>
 {% endblock %}
 
