@@ -1,13 +1,12 @@
-
 from django.urls import path
-from mailings.views import index, send_email_to_client, success, no_success, homepage
+from mailings.views import index, send_email_to_client, success, no_success, homepage, BlogListView, BlogDetailView, \
+    BlogUpdateView, BlogDeleteView, BlogCreateView
 from django.contrib.auth.decorators import login_required
 
 from mailings.views import ClientListView, ClientDetailView, ClientUpdateView, ClientDeleteView, ClientCreateView
 from mailings.views import MessageListView, MessageDetailView, MessageUpdateView, MessageDeleteView, MessageCreateView
 from mailings.views import SettingsListView, SettingsDetailView, SettingsUpdateView, SettingsDeleteView, \
     SettingsCreateView
-
 
 urlpatterns = [
     path("", homepage),
@@ -34,5 +33,11 @@ urlpatterns = [
     path('send_email/<int:client_id>/', send_email_to_client, name='send_email_to_client'),
     path("email_success/", success, name='success'),
     path("email_no_success/", no_success, name='no success'),
+
+    path("blog/", BlogListView.as_view(), name="blog"),
+    path("blog_detail/<int:pk>/", BlogDetailView.as_view(), name="blog_detail"),
+    path("blog_update/<int:pk>/", BlogUpdateView.as_view(), name="blog_update"),
+    path("blog_delete/<int:pk>/", BlogDeleteView.as_view(), name="blog_delete"),
+    path("blog_create/", BlogCreateView.as_view(), name="blog_create"),
 
 ]

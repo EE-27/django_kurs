@@ -69,5 +69,23 @@ class Log(models.Model):
     email_body = models.TextField(verbose_name="Email Body", blank=True, null=True)
 
     class Meta:
-        verbose_name = "Mailing log"
-        verbose_name_plural = "Mailing logs"
+        verbose_name = "Log"
+        verbose_name_plural = "Logs"
+
+
+class Blog(models.Model):
+    title = models.CharField(max_length=64, verbose_name="Title")
+    article = models.CharField(max_length=512, verbose_name="Article")
+    image = models.ImageField(upload_to="blog/", verbose_name="Blog Image", null=True, blank=True)
+    number_of_view = models.PositiveIntegerField(default=0, verbose_name="Number of Views")
+    publication_date = models.DateField(verbose_name="Publication Date")
+
+    def __str__(self):
+        return f"{self.title}"
+
+    class Meta:
+        verbose_name = "Blog"
+        verbose_name_plural = "Blogs"
+
+
+

@@ -1,7 +1,7 @@
 import random
 
 from django.contrib import messages
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from django.shortcuts import redirect, render
@@ -96,3 +96,4 @@ def verify_code(request, code):
             messages.error(request, 'Form is not valid. Please try again.')
 
     return redirect(reverse('users:detail'))
+

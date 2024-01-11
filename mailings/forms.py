@@ -1,6 +1,6 @@
 from django import forms
 
-from mailings.models import Client, Message, Settings
+from mailings.models import Client, Message, Settings, Blog
 
 
 class ClientForm(forms.ModelForm):
@@ -19,3 +19,9 @@ class SettingsForm(forms.ModelForm):
     class Meta:
         model = Settings
         exclude = ("mailing_status",)
+
+
+class BlogForm(forms.ModelForm):
+    class Meta:
+        model = Blog
+        fields = "__all__"

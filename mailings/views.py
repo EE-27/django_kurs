@@ -8,12 +8,13 @@ from django.utils import timezone
 
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView
 
-from mailings.forms import ClientForm, MessageForm, SettingsForm
-from mailings.models import Client, Message, Settings, Log
+from mailings.forms import ClientForm, MessageForm, SettingsForm, BlogForm
+from mailings.models import Client, Message, Settings, Log, Blog
 
 
 def homepage(request):
     return render(request, "mailings/homepage.html")
+
 
 def index(request):
     logs = Log.objects.all()
@@ -32,9 +33,12 @@ def no_success(request):
 def is_superuser(user):
     """ tyhle permissions fungujou jen na funkce """
     return user.is_superuser
+
+
 def is_moderator(user):
     """ tyhle permissions fungujou jen na funkce """
     return user.groups.filter(name='moderator').exists()
+
 
 ### Client
 class ClientListView(ListView):
@@ -259,3 +263,43 @@ def client_detail(request, client_id):
 
     context = {'client': client}
     return render(request, 'mailings/client_detail.html', context)
+
+
+### Blog
+class BlogListView(ListView):
+    model = Blog
+    template_name = "mailings/blog/blog.html"
+
+
+class BlogDetailView(DetailView):
+    model = Blog
+    template_name = "mailings/blog/blog_detail.html"
+
+
+class BlogUpdateView(UpdateView):
+    model = Blog
+    form_class = BlogForm
+    # permission_required = "blog.change_blog"
+    template_name = "mailings/blog/blog_form.html"
+
+    def get_success_url(self):
+        return reverse("blog")
+
+
+class BlogDeleteView(DetailView):
+    model = Blog
+    # permission_required = "mailings.delete_blog"
+    template_name = "mailings/blog/blog_confirm_delete.html"
+
+    def get_success_url(self):
+        return reverse("blog")
+
+
+class BlogCreateView(CreateView):
+    model = Blog
+    form_class = BlogForm
+    # permission_required = mailings.add_blog
+    template_name = "mailings/blog/blog_form.html"
+
+    def get_success_url(self):
+        return reverse("blog")
