@@ -1,4 +1,6 @@
 from django.urls import path
+from django.views.decorators.cache import cache_page
+
 from mailings.views import index, send_email_to_client, success, no_success, homepage, BlogListView, BlogDetailView, \
     BlogUpdateView, BlogDeleteView, BlogCreateView
 from django.contrib.auth.decorators import login_required
@@ -34,6 +36,8 @@ urlpatterns = [
     path("email_success/", success, name='success'),
     path("email_no_success/", no_success, name='no success'),
 
+    # cache --- nezapomenout si spustit redis-server.exe
+    # path("blog/", cache_page(60)(BlogListView.as_view()), name="blog"),
     path("blog/", BlogListView.as_view(), name="blog"),
     path("blog_create/", BlogCreateView.as_view(), name="blog_create"),
     path("blog_detail/<int:pk>/", BlogDetailView.as_view(), name="blog_detail"),
